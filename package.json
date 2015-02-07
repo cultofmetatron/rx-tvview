@@ -5,6 +5,7 @@
   "main": "index.js",
   "engine": "node 0.12.*",
   "scripts": {
+    "start": "supervisor ./index.js",
     "test": "mocha test"
   },
   "author": "Peter de Croos",
