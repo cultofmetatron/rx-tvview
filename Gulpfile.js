@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserify = require('gulp-browserify');
 var sourcemaps = require('gulp-sourcemaps');
 var less = require('gulp-less');
+var path = require('path');
 
 gulp.task('frontend', function() {
   return gulp.src('./frontend/src/js/**/*.js')
@@ -17,12 +18,17 @@ gulp.task('frontend', function() {
     .pipe(gulp.dest('./frontend/build/js'));
 });
 
+function logger() {
+  return console.log.apply(console, arguments);
+}
+
 gulp.task('less', function() {
-  gulp.src('./src/styles/**/*.less')
+  return gulp.src('./frontend/src/stylesheets/**/*.less')
     .pipe(less({
-      paths: [ path.join(__dirname, 'src', 'styles') ]
+      paths: [ path.join(__dirname,'frontend', 'src', 'stylesheets') ]
     }))
-    .pipe(gulp.dest('./build/styles'));
+    .on('error', logger)
+    .pipe(gulp.dest('./frontend/build/stylesheets'))
 });
 
 
