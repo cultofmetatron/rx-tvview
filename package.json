@@ -18,7 +18,8 @@
     "less": "^2.3.1",
     "lodash": "^3.1.0",
     "rx": "^2.3.25",
-    "supervisor": "^0.6.0"
+    "supervisor": "^0.6.0",
+    "traceur": "0.0.84"
   },
   "devDependencies": {
     "es6ify": "^1.6.0",

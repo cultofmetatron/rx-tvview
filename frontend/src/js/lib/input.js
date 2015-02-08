@@ -35,13 +35,15 @@ var createPressStream = function(inputType) {
   });
 };
 
-
+var inputStreams = {}
 _.each(_.keys(inputs), function(inputType) {
   //we set up a subject proxy so that we can have multiple subscribers
   var msgProxy = new Rx.Subject();
   createPressStream(inputType).subscribe(msgProxy);
-  module.exports[inputType + 'Key'] = msgProxy;
-}, this);
+  inputStreams[inputType + 'Key'] = msgProxy;
+});
+
+module.exports = inputStreams;
 
 
 

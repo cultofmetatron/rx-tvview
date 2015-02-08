@@ -1,4 +1,8 @@
 
+//must bring in the treaceur runtime or things break. 
+require('traceur/bin/traceur-runtime');
+
+
 console.log('hello world');
 
 var input = require('./lib/input');
