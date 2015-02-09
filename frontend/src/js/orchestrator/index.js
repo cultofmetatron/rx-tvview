@@ -12,7 +12,6 @@ module.exports = function() {
 
   //start taking in inputs and sending them to all the recievers
  
-  //*********************************//
   //Objective 1, get the sidebar menu activated
 
 

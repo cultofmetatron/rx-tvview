@@ -1,0 +1,34 @@
+/*
+ * these controllers will be event handlers for data comming
+ * in. they will then update the internal state of the dom
+ * appropriatly through the tamplte
+ */
+
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+var _ = require('lodash');
+var Immutable = require('immutable');
+
+var BaseController = function(options) {
+  if (!options.dispatcher) { throw new Error('dispatcher not specified!!'); }
+  this.dispatcher = options.templates;
+  this.templates = options.templates;
+  this.storage = Immutable.map(_.isObject(options.initialState) ? options.initialState : {});
+};
+
+util.inherits(BaseView, EventEmitter);
+
+//allows us to chain in the event flow through a stream;
+BaseController.prototype.subscribe = (observable, args__) => {
+  args = Array.prototype.slice.call(arguments, 1);
+  observable.subscribe.apply(observable, _.map(args__, (fn) => {
+    return fn.bind(this);
+  }, this));
+  return this;  //for chaining purposes
+};
+
+module.exports.BaseController = BaseController;
+
+
+
+
