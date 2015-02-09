@@ -11,7 +11,8 @@ gulp.task('frontend', function() {
       insertGlobals : true,
       debug : true,
       transform: [
-        ['es6ify', {global: true, modules:'commonjs'}]
+        ['es6ify', {global: true, modules:'commonjs'}],
+        ['brfs']
       ]
     }))
     .pipe(sourcemaps.write())
