@@ -1,7 +1,11 @@
 /* colors */
-@sidebarBgColor: rgb(24, 22, 19);
 
-@topNavColor: rgb(123, 0, 1);
+@netflixRed: rgb(123, 0, 2);
+@sidebarBgColor: rgb(24, 22, 19);
+@DarkColor: rgb(45, 40, 36);
+@LightColor: rgb(99, 99, 99);
+
+@topNavBgColor: @netflixRed;
 
 @mainViewBgColor: rgb(45, 40, 36);
 
@@ -9,19 +13,41 @@
 
 
 body {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
   color: red;
-  background-color: @sidebarBgColor;
+  background-color: rgb(24, 22, 18);
 };
 
-#header {
-
+.container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-#side-panel.standard {
-
+.header {
+  background-color: @topNavBgColor;
+  height: 5em;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  width: 100%;
 }
 
-#main-panel {
+.side-panel.standard {
+  display: inline-block;
+  background-color: @DarkColor;
+  color: @LightColor;
+  padding-top: 5em;
+  padding-left: 3em;
+  padding-right: 4em;
+  padding-bottom: 10em;
+  width: 15em;
+}
 
+.main-panel {
+  display: inline-block;
+  padding-left: 1em;
 }
 
