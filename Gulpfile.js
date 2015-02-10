@@ -1,23 +1,23 @@
 var gulp = require('gulp');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var sourcemaps = require('gulp-sourcemaps');
 var less = require('gulp-less');
+var es6ify = require('es6ify');
+var brfs = require('brfs');
 var path = require('path');
+var fs = require('fs');
 
 gulp.task('frontend', function() {
-  return gulp.src('./frontend/src/js/**/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(browserify({
-      insertGlobals : true,
-      debug : true,
-      transform: [
-        ['es6ify', {global: true, modules:'commonjs'}],
-        ['brfs']
-      ]
-    }))
-    .pipe(sourcemaps.write())
-    .on('error', logger)
-    .pipe(gulp.dest('./frontend/build/js'));
+  return browserify({
+    debug: true,
+    transform: ['es6ify'],
+    //standalone: true
+  })
+    //.add('./frontend/src/js/**/*.js')
+    .require(require.resolve('./frontend/src/js/main/app.js'), { entry: true })
+    .bundle()
+    //.pipe(gulp.dest('./frontend/build/js'));
+    .pipe(fs.createWriteStream('./frontend/build/js/main/app.js'))
 });
 
 gulp.task('less', function() {

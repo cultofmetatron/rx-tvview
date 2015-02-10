@@ -16,19 +16,18 @@ var BaseController = function(options) {
   this.storage = Immutable.map(_.isObject(options.initialState) ? options.initialState : {});
 };
 
-util.inherits(BaseView, EventEmitter);
+util.inherits(BaseController, EventEmitter);
 
 //allows us to chain in the event flow through a stream;
-BaseController.prototype.subscribe = (observable, args__) => {
+BaseController.prototype.subscribe = function(observable, args) {
   args = Array.prototype.slice.call(arguments, 1);
-  observable.subscribe.apply(observable, _.map(args__, (fn) => {
+  observable.subscribe.apply(observable, _.map(args, function(fn) {
     return fn.bind(this);
   }, this));
   return this;  //for chaining purposes
 };
 
+
 module.exports.BaseController = BaseController;
-
-
 
 

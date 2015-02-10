@@ -2,7 +2,7 @@
  * The orchestator organizes components and chooses which 
  * applications recieve which events
  */
-
+var path = require('path');
 
 module.exports = function() {
   console.log('booting up the orchestrator');
@@ -13,6 +13,8 @@ module.exports = function() {
   //start taking in inputs and sending them to all the recievers
  
   //Objective 1, get the sidebar menu activated
+  //var selection = require(path.join(__dirname, '..', 'components', 'selection'));
+  var selection = require('../components/selection');
 
 
 
