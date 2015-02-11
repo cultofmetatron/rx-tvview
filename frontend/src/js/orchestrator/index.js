@@ -6,7 +6,7 @@ var path = require('path');
 
 var ActionBus  = require('./action-bus');
 var Dispatcher = require('./dispatcher');
-
+var Store      = require('./store');
 
 module.exports = function() {
   console.log('booting up the orchestrator');
@@ -14,6 +14,9 @@ module.exports = function() {
   var actionBus = new ActionBus();
   var dispatcher = new Dispatcher();
 
+  var appState = new Store('appstate', {
+    menu: require('../../../../data/menu.json').menu,
+  });
 
   //Objective 1, get the sidebar menu activated
   var selection = new (require('../components/selection').Controller)({
@@ -23,11 +26,6 @@ module.exports = function() {
       selections: []
     }
   });
-
-  
-
-
-
 
 };
 
