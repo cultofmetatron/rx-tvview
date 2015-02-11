@@ -49,7 +49,7 @@ BaseController.prototype.get = function(property) {
 };
 
 BaseController.prototype.getContext = function() {
-  return 
+  return this.storage.toJS();
 };
 
 
