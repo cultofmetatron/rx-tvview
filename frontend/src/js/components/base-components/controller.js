@@ -31,6 +31,27 @@ BaseController.prototype.subscribe = function(observable, args) {
   return this;  //for chaining purposes
 };
 
+BaseController.prototype.set = function(property, value) {
+  var newStore = this.storage.set(property, value);
+  if (newStore === this.storage) {
+    this.emit('change', {
+      timestamp: Date.now(),
+      oldVal: this.storage
+      newVal: newStore
+    });
+    this.storage = newStore;
+  }
+  return this;
+};
+
+BaseController.prototype.get = function(property) {
+  return this.storage.get(property);
+};
+
+BaseController.prototype.getContext = function() {
+  return 
+};
+
 
 module.exports.BaseController = BaseController;
 
