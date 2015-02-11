@@ -12,6 +12,9 @@ var Immutable = require('immutable');
 var BaseController = function(options) {
   if (!options.dispatcher) { throw new Error('dispatcher not specified!!'); }
   this.dispatcher = options.templates;
+  //regsiter the action bus to listen to this
+  this.actionBus.listenTo(this);
+
   this.templates = options.templates;
   this.storage = Immutable.map(_.isObject(options.initialState) ? options.initialState : {});
 };
