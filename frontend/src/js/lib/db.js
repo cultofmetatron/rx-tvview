@@ -1,8 +1,9 @@
 var Rx = require('rx');
 
+//removed because the browserify workflow interfered with e6ify
 //var PouchDB = require('pouchdb');
 
-/*
+
 var createChangeStream = function(db) {
   return Rx.Observable.create(function(observer) {
     db.changes({ live: true })
@@ -13,7 +14,7 @@ var createChangeStream = function(db) {
 };
 
 var DBStore = function(dbName) {
-  this.db = new Pouchdb(dbName);
+  this.db = new PouchDB(dbName);
   this.changes = new Rx.Subject();
   createChangeStream(this.db).subscribe(this.changes);
 };
@@ -21,9 +22,9 @@ var DBStore = function(dbName) {
 DBStore.create = function(db) {
   return new DBStore(db);
 }
-*/
 
-var DBStore = {};
+
+//var DBStore = {};
 
 
 
