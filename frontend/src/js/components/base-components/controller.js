@@ -53,6 +53,12 @@ BaseController.prototype.getContext = function() {
   return this.storage.toJS();
 };
 
+//given a calback, the callback is given the dispatch stream
+BaseController.prototype.addResponder(function(cb) {
+  cb.call(this, this.dispatcher, this);
+  return this;
+});
+
 
 module.exports.BaseController = BaseController;
 

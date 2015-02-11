@@ -27,6 +27,8 @@ var Controller = function(opt) {
     menu: menuTemplate,
     selection: this.selectionTemplate
   }
+  
+
 };
 
 util.inherits(Controller, BaseController);

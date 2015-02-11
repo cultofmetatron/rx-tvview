@@ -18,9 +18,13 @@ module.exports = function() {
   //Objective 1, get the sidebar menu activated
   var selection = new (require('../components/selection').Controller)({
     actionBus: actionBus,
-    dispatcher: dispatcher
+    dispatcher: dispatcher,
+    initialState: {
+      selections: []
+    }
   });
 
+  
 
 
 
