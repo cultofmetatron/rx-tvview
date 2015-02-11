@@ -13,6 +13,7 @@ var BaseController = function(options) {
   if (!options.dispatcher) { throw new Error('dispatcher not specified!!'); }
   this.dispatcher = options.templates;
   //regsiter the action bus to listen to this
+  if (!options.actionBus) { throw new Error('actionBus not specified!!'); }
   this.actionBus.listenTo(this);
 
   this.templates = options.templates;
