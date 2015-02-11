@@ -11,13 +11,14 @@ var Immutable = require('immutable');
 
 var BaseController = function(options) {
   if (!options.dispatcher) { throw new Error('dispatcher not specified!!'); }
-  this.dispatcher = options.templates;
+  this.dispatcher = options.dispatcher;
   //regsiter the action bus to listen to this
   if (!options.actionBus) { throw new Error('actionBus not specified!!'); }
+  this.actionBus = options.actionBus
   this.actionBus.listenTo(this);
 
   this.templates = options.templates;
-  this.storage = Immutable.map(_.isObject(options.initialState) ? options.initialState : {});
+  this.storage = Immutable.Map(_.isObject(options.initialState) ? options.initialState : {});
 };
 
 util.inherits(BaseController, EventEmitter);
@@ -36,7 +37,7 @@ BaseController.prototype.set = function(property, value) {
   if (newStore === this.storage) {
     this.emit('change', {
       timestamp: Date.now(),
-      oldVal: this.storage
+      oldVal: this.storage,
       newVal: newStore
     });
     this.storage = newStore;
