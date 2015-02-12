@@ -3,10 +3,10 @@ var util = require('util');
 var Rx = require('rx');
 var Immutable = require('immutable');
 
-var Store = function(name, state) {
+var Store = function(options) {
   EventEmitter.call(this);
-  this.name = name;
-  this.store = Immutable.Map(state || {});
+  this.name = options.name;
+  this.store = Immutable.Map(options.state || {});
   //only dispatcher subscribe so no need for multiple broadcasts
   this._stream = Rx.Node.fromEvent(this, 'update');
 };
@@ -22,6 +22,7 @@ Store.prototype.onAction = function(actionBus, cb) {
 //reflect that
 Store.prototype.mutate = function(cb) {
   var newVal = this.store.withMutations(cb.bind(this));
+  debugger
   if (newVal !== this.store) {
     this.emit('change', {
       name: this.name,
