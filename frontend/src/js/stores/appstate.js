@@ -30,14 +30,30 @@ AppState.prototype.loadInitialState = function() {
   var store = {};
   store.menu = require('../../../../data/menu.json').menu
   store.menu[0].active = true; //start focus here
-  store.active = [['menu', 0], ['component', null]];
+  store.active = {
+    menu: 0,
+    component: null // could also be an array [0, 0]
+  };
   this.store = Immutable.fromJS(store);
   this.buildLibraryGrid();
 };
 
 AppState.prototype.moveDown = function() {
-  
-}
+  var active = this.store.get('active');
+  if (active.get('component') === null) {
+    //is the menu the index not the last one of the list?
+    if (active.get('menu') < this.store.get('menu').size - 1 ) {
+      //increment the menu
+      this.mutate((store) => {
+        store.updateIn(['active', 'menu'], (value) => { return value + 1; })
+      });
+      this.buildLibraryGrid(); //redraw the library
+    }
+  } else {
+    //we check to see if the row is the bottom most and move it down
+    var activeLibrary = this.store.get('libraryGrid');
+  }
+};
 
 //method to be run when the input comes in
 AppState.prototype.onInput = function(type) {
