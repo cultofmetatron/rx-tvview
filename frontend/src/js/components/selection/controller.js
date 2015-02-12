@@ -1,11 +1,8 @@
 var BaseController = require('../base-components/index.js').BaseController;
 
-
-var pc = require('paperclip');
-var multiline = require('multiline');
 var path = require('path');
 var fs = require('fs');
-var jQuery = require('jquery');
+var $ = require('jquery');
 var _ = require('lodash')
 var Immutable = require('immutable');
 //joined due to strange error when using ./
@@ -13,7 +10,6 @@ var Immutable = require('immutable');
 
 var util = require('util');
 
-  
 
 //var menuTemplate = pc.template(fs.readFileSync('./templates/selection.tmp'));
 
@@ -21,8 +17,12 @@ var util = require('util');
 var Controller = function(opt) {
   BaseController.call(this, opt);
   this.templates = {
-    menu: pc.template(templateHtml).view(this.initialState)
-  }
+    menu: _.template($('#tmp-selection').html())
+  };
+  this.classes = ['sidemenu']
+  this.context = {
+    classes: this.classes.join(' ')
+  };
 
   this.subscribe(this.onChange);
   this.render();
@@ -32,27 +32,36 @@ util.inherits(Controller, BaseController);
 
 Controller.prototype.onChange = function(stream) {
   var self = this;
-  stream
+  return stream
   .filter((val) => {
-    return val.name === 'appState'
+    console.log('onChange', val)
+    return val.store === 'appstate';
   })
   .map((val) => {
-    return val.value();
+    return val.value;
   })
   .subscribe((val) => {
-    self.store = Immutable(val)
+    console.log('selection recieved change event!')
+    self.store = Immutable.fromJS(val)
     self.render();
   });
 };
 
 Controller.prototype.render = function() {
   var context = this.getContext();
-  console.log('context', context);
-  return this.templates.menu.setProperties(context);
+  console.log('rendering', context);
+  try {
+  var html = this.templates.menu(context);
+  } catch (err) {
+    html = "";
+  }
+
+  this.$el.html(html);
+  return this;
 }
 
 Controller.prototype.mount = function(domElement) {
-  jQuery(domElement).html(this.templates.menu.render());
+  $(domElement).html(this.$el);
   return this;
 };
 

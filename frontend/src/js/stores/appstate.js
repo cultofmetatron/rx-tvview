@@ -9,6 +9,9 @@ var _ = require('lodash');
 var AppState = function(opts) {
   Store.call(this, opts);
   this.loadInitialState();
+  this.mutate((store) => {
+    return store.set('initify', 'go');
+  })
 };
 
 util.inherits(AppState, Store);

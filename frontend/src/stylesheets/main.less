@@ -37,7 +37,7 @@ body {
 
 .header {
   background-color: @topNavBgColor;
-  height: 5em;
+  height: 10em;
   margin-left: 0px;
   margin-right: 0px;
   margin-top: 0px;
@@ -57,8 +57,7 @@ body {
   overflow-y: visible;
   margin-bottom: auto;
   vertical-align: top;
-} 
-
+}
 .main-panel {
   display: inline-block;
   padding-left: 1em;
@@ -69,7 +68,87 @@ body {
   margin: 0px;
   overflow-y: visible;
   vertical-align: top;
-  padding-top: 5em;
+  padding-top: 3em;
   padding-left: 2em;
 }
+
+
+
+ul.sidemenu.focused li.active {
+  background-color: @mainViewTextColor;
+  color: @DarkColor;
+}
+
+
+ul.sidemenu li.active {
+  background-color: @LightColor;
+  color: @DarkColor;
+}
+
+
+
+ul.sidemenu li {
+  
+  background-color: @DarkColor;
+  color: @LightColor;
+
+  margin-bottom: .5em;
+  font-family: sans-serif;
+  font-size: 1.2em;
+  text-align: left;
+  padding-left: 1em;
+  display: block;
+  padding-top: 1em;
+  padding-bottom: 1em;
+
+
+}
+
+
+
+
+/*library view */
+
+.main-panel .row {
+  display: block;
+  overflow: visible;
+  border-bottom: 2px, green;
+
+}
+
+
+.main-panel .item {
+  display: inline-block;
+  margin-right: 20px;
+  width: 188px;
+
+}
+
+.main-panel .item.active img {
+  display: block;
+  border-width: 8px;
+  overflow: visible;
+  border-style: hidden;
+  border-color: grey;
+  border-width: 8px;
+  overflow: visible;
+  border-style: solid;
+  border-radius: 5px;
+
+}
+
+.main-panel .item img {
+  display: block;
+  border-color: transparent;
+  border-width: 8px;
+  overflow: visible;
+  border-style: solid;
+}
+
+h1.libraryhead {
+  font-family: sans-serif;
+  font-size: 3em;
+
+}
+
 

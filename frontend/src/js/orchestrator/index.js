@@ -29,29 +29,39 @@ module.exports = function() {
 
   window.appState = appState
 
+  dispatcher.listenTo(appState);
+
+  
   appState.onAction(actionBus, function(stream, store) {
     return stream
     .filter((val) => {
       return val.type === 'input';
     })
     .subscribe((val) => {
-      console.log('appstate getting value: ', val);
       this.onInput(val.key)
     });
   });
 
-/*
+
   //Objective 1, get the sidebar menu activated
   var selection = new (require('../components/selection').Controller)({
     actionBus: actionBus,
     dispatcher: dispatcher,
-    initialState: {
-      menu: appState.store.get('menu')
-    }
+    name:'selection menu',
+    initialState: {}
   });
 
+  var library = new(require('../components/library-view/controller'))({
+    actionBus: actionBus,
+    dispatcher: dispatcher,
+    name:'library-view',
+    initialState: {}
+  })
+
+  
   selection.mount('.side-panel')
-*/
+  library.mount('.main-panel')
+
 
 
 

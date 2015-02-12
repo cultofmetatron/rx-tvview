@@ -76,14 +76,22 @@
       "active": false,
       "label": "New Arivals",
       "links": [
-        
+         {
+          "active": false,
+          "thumb": "841257.jpg",
+          "name": "Prison Break"
+        }
       ]
     },
     {
       "active": false,
       "label": "Instant Queue",
       "links": [
-      
+        {
+          "active": false,
+          "thumb": "841246.jpg",
+          "name": "Lie to Me"
+        }
       ]
     },
   ]

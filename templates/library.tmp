@@ -1,0 +1,11 @@
+<h1 class="libraryhead"> <%= ctx.menu[ctx.active.menu.index].label %> <h1>
+
+<% _.each(ctx.libraryGrid, function(i) { %>
+  <div class="row">
+  <% _.each(i, function(val) { %>
+    <div class="item <%= (val.active) ? "active" : "" %>">
+      <img alt="<%= val.name %>", src="/img/box_art/<%= val.thumb %>">    
+    </div>
+  <% }) %>
+<% }) %>
+

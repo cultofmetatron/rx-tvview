@@ -28,7 +28,6 @@ var ActionBus = function() {
   this._stream = new Rx.Subject();
   //creates the internal stream, I can leverage the node api
   Rx.Node.fromEvent(this, 'action').subscribe(this._stream);
-
 };
 
 util.inherits(ActionBus, EventEmitter);

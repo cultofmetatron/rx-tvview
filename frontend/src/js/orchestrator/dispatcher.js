@@ -7,7 +7,8 @@ var Dispatcher = function() {
   EventEmitter.call(this);
   this._stream = new Rx.Subject();
   //creates the internal stream, I can leverage the node api
-  Rx.Node.fromEvent(this, 'update').subscribe(this._stream);
+  Rx.Node.fromEvent(this, 'change').subscribe(this._stream);
+
 };
 
 util.inherits(Dispatcher, EventEmitter);
@@ -18,7 +19,7 @@ Dispatcher.prototype.getStream = function() {
 
 //stores push changes through this interface
 Dispatcher.prototype.push = function(storeName, value) {
-  this.emit(event, {
+  this.emit('change', {
     store: storeName,
     value: value
   });
@@ -29,7 +30,8 @@ Dispatcher.prototype.push = function(storeName, value) {
 Dispatcher.prototype.listenTo = function(store) {
   var self = this;
   store.on('change', function(storeData) {
-    self.push(store.name, store.value);
+    console.log('pickeup a change from: ', storeData);
+    self.push(storeData.name, storeData.value);
   });
   return this;
 };

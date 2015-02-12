@@ -10,6 +10,7 @@ app.set('views', [path.join(__dirname, 'views')]);
 
 app.use('/js', express.static(path.join(__dirname, 'frontend', 'build', 'js')))
 app.use('/styles', express.static(path.join(__dirname, 'frontend', 'build' , 'stylesheets')));
+app.use('/img', express.static(path.join(__dirname, 'images')))
 
 app.get('/', function(req, res, next) {
   res.status(200).render('app', {});

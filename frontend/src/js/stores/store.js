@@ -8,7 +8,8 @@ var Store = function(options) {
   this.name = options.name;
   this.store = Immutable.Map(options.state || {});
   //only dispatcher subscribe so no need for multiple broadcasts
-  this._stream = Rx.Node.fromEvent(this, 'update');
+  this._stream = Rx.Node.fromEvent(this, 'change');
+  
 };
 util.inherits(Store, EventEmitter);
 

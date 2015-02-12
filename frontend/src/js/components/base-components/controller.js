@@ -8,18 +8,21 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var _ = require('lodash');
 var Immutable = require('immutable');
+var $ = require('jquery');
 
 var BaseController = function(options) {
+  this.name = options.name;
   if (!options.dispatcher) { throw new Error('dispatcher not specified!!'); }
   this.dispatcher = options.dispatcher;
   //regsiter the action bus to listen to this
   if (!options.actionBus) { throw new Error('actionBus not specified!!'); }
   this.actionBus = options.actionBus
   this.actionBus.listenTo(this);
-  this.$el = jQuery(options.el || '<div></div>');
+  this.$el = $(options.el || '<div></div>');
 
   this.templates = options.templates;
   this.store = Immutable.Map(this.transform(_.isObject(options.initialState) ? options.initialState : {}));
+
 };
 
 util.inherits(BaseController, EventEmitter);
@@ -53,7 +56,11 @@ BaseController.prototype.get = function(property) {
 };
 
 BaseController.prototype.getContext = function() {
-  return this.store.toJS();
+  return {
+    classes: this.classes.join(' '),
+    ctx: this.store.toJS(),
+    _ : _
+  }
 };
 
 //given a calback, the callback is given the dispatch stream

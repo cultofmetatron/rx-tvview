@@ -1,4 +1,5 @@
-<li>
-  
-
-</li>
+<ul class="sidemenu <%= (ctx.active.menu.focused) ? "focused" : '' %> <%= ctx.classes %>">
+  <% _.each(ctx.menu, function(menu, index) { %>
+   <li class="<%= (ctx.active.menu.index === index) ? "active" : "" %>"> <%= menu.label %> </li>
+  <% });   %>
+</ul>
