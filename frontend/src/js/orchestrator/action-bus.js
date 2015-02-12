@@ -32,6 +32,11 @@ ActionBus.prototype.listenTo = function(actionEmitter) {
   return this;
 };
 
+ActionBus.prototype.push = function(action) {
+  this.emit('action', action);
+  return this;
+}
+
 var log = function(val) {
   console.log('actionlog: ', val);
 }

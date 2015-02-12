@@ -17,7 +17,21 @@ module.exports = function() {
   var appState = new Store('appState', {
     menu: require('../../../../data/menu.json').menu,
   });
+  window.appState = appState
 
+  appState.onAction(actionBus, function(stream, store) {
+    stream.subscribe(function(val) {
+      console.log('appstate getting value: ', val);
+    })
+  });
+
+  actionBus.push({ msg: "hello world" });
+
+
+
+
+
+/*
   //Objective 1, get the sidebar menu activated
   var selection = new (require('../components/selection').Controller)({
     actionBus: actionBus,
@@ -28,6 +42,9 @@ module.exports = function() {
   });
 
   selection.mount('.side-panel')
+*/
+
+
 
 };
 
