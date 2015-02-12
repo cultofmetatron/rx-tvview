@@ -284,6 +284,13 @@ AppState.prototype.moveRight = function() {
   return this;
 };
 
+AppState.prototype.pressEnter = function() {
+  var active = this.store.get('active');
+  if (active.get('movie') === null) {
+    this.moveRight();
+  }
+}
+
 //method to be run when the input comes in
 AppState.prototype.onInput = function(type) {
   (({
@@ -291,7 +298,7 @@ AppState.prototype.onInput = function(type) {
     down: this.moveDown,
     left: this.moveLeft,
     right: this.moveRight,
-    //enter: this.moveRight
+    enter: this.pressEnter
   
   })[type] || function() {}).call(this);
 };
