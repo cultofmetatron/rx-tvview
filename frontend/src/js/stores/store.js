@@ -22,7 +22,6 @@ Store.prototype.onAction = function(actionBus, cb) {
 //reflect that
 Store.prototype.mutate = function(cb) {
   var newVal = this.store.withMutations(cb.bind(this));
-  debugger
   if (newVal !== this.store) {
     this.emit('change', {
       name: this.name,
