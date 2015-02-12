@@ -2,7 +2,7 @@
 var Store = require('./store');
 var util = require('util');
 var Immutable = require('immutable');
-
+var _ = require('lodash');
 var AppState = function(opts) {
   Store.call(this, opts);
   this.loadInitialState();
@@ -19,12 +19,38 @@ util.inherits(AppState, Store);
  *  element of the menu and set ist links for the active links
  */
 
-//rebuilds the grid from the library data
-AppState.prototype.buildLibraryGrid = function() {
-  //do this later
+var chunk = function(arr, len) {
+  var chunks = [];
+  var i = 0;
+  var n = arr.length;
+  while (i < n) {
+    chunks.push(arr.slice(i, i += len));
+  }
+  return chunks;
 };
 
-/* active is a marker of what data is active + what sub component */
+
+//rebuilds the grid from the library data
+AppState.prototype.buildLibraryGrid = function() {
+  var activeSelectionIndex = this.store.get('active').get('menu'); //get the index
+  var library = chunk(_.map(this.store.get('menu').get(activeSelectionIndex).get('links').toJS(), (link) => {
+    link.active = false; //explicitly make them false, well reset (THE ONE) after
+    return link;
+  }, this), 4);
+  
+  /* if a movie is specified in focus, then we shold mark it as active */
+  var coordinates = this.store.get('active').get('movie');
+  if (coordinates) {
+    library[coordinates.get(0)][coordinates.get(1)]['active'] = true;
+  }
+  this.mutate((store) => {
+    return store.updateIn(['libraryGrid'], () => {
+      return Immutable.fromJS(library);
+    });
+  });
+};
+
+/* active is a marker of what data is active + what sub movie */
 
 AppState.prototype.loadInitialState = function() {
   var store = {};
@@ -32,7 +58,7 @@ AppState.prototype.loadInitialState = function() {
   store.menu[0].active = true; //start focus here
   store.active = {
     menu: 0,
-    component: null // could also be an array [0, 0]
+    movie: null // could also be an array [0, 0]
   };
   this.store = Immutable.fromJS(store);
   this.buildLibraryGrid();
@@ -40,7 +66,7 @@ AppState.prototype.loadInitialState = function() {
 
 AppState.prototype.moveDown = function() {
   var active = this.store.get('active');
-  if (active.get('component') === null) {
+  if (active.get('movie') === null) {
     //is the menu the index not the last one of the list?
     if (active.get('menu') < this.store.get('menu').size - 1 ) {
       //increment the menu
