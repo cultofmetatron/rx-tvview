@@ -2,7 +2,7 @@
   "menu": [
     {
       "label": "suggestions for you",
-      "active": false,
+      "active": true,
       "links": [
         {
           "thumb": "822761.jpg",
@@ -85,6 +85,7 @@
       "Links": [
       
       ]
-    }
+    },
+    {}
   ]
 }

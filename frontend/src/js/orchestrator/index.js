@@ -14,7 +14,7 @@ module.exports = function() {
   var actionBus = new ActionBus();
   var dispatcher = new Dispatcher();
 
-  var appState = new Store('appstate', {
+  var appState = new Store('appState', {
     menu: require('../../../../data/menu.json').menu,
   });
 
@@ -23,9 +23,11 @@ module.exports = function() {
     actionBus: actionBus,
     dispatcher: dispatcher,
     initialState: {
-      selections: []
+      menu: appState.store.get('menu')
     }
   });
+
+  selection.mount('.side-panel')
 
 };
 

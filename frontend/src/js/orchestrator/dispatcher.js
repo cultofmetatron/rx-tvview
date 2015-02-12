@@ -12,7 +12,9 @@ var Dispatcher = function() {
 
 util.inherits(Dispatcher, EventEmitter);
 
-
+Dispatcher.prototype.getStream = function() {
+  return this._stream;
+}
 
 //stores push changes through this interface
 Dispatcher.prototype.push = function(storeName, value) {

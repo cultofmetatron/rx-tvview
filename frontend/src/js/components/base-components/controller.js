@@ -16,41 +16,44 @@ var BaseController = function(options) {
   if (!options.actionBus) { throw new Error('actionBus not specified!!'); }
   this.actionBus = options.actionBus
   this.actionBus.listenTo(this);
+  this.$el = jQuery(options.el || '<div></div>');
 
   this.templates = options.templates;
-  this.storage = Immutable.Map(_.isObject(options.initialState) ? options.initialState : {});
+  this.store = Immutable.Map(this.transform(_.isObject(options.initialState) ? options.initialState : {}));
 };
 
 util.inherits(BaseController, EventEmitter);
 
 //allows us to chain in the event flow through a stream;
-BaseController.prototype.subscribe = function(observable, args) {
-  args = Array.prototype.slice.call(arguments, 1);
-  observable.subscribe.apply(observable, _.map(args, function(fn) {
-    return fn.bind(this);
-  }, this));
-  return this;  //for chaining purposes
+BaseController.prototype.subscribe = function(cb) {
+  cb.call(this, this.dispatcher.getStream());
+  return this;
 };
 
 BaseController.prototype.set = function(property, value) {
-  var newStore = this.storage.set(property, value);
-  if (newStore === this.storage) {
+  var newStore = this.store.set(property, value);
+  if (newStore === this.store) {
     this.emit('change', {
       timestamp: Date.now(),
-      oldVal: this.storage,
+      oldVal: this.store,
       newVal: newStore
     });
-    this.storage = newStore;
+    this.store = newStore;
   }
   return this;
 };
 
+//to be overridden
+BaseController.prototype.transform = function(val) {
+  return val;
+}
+
 BaseController.prototype.get = function(property) {
-  return this.storage.get(property);
+  return this.store.get(property);
 };
 
 BaseController.prototype.getContext = function() {
-  return this.storage.toJS();
+  return this.store.toJS();
 };
 
 //given a calback, the callback is given the dispatch stream
