@@ -3,34 +3,41 @@
  * applications recieve which events
  */
 var path = require('path');
-
+var _ = require('lodash');
 var ActionBus  = require('./action-bus');
 var Dispatcher = require('./dispatcher');
-var Store      = require('./store');
+var Store      = require('../stores/store');
+var AppState   = require('../stores/store');
+
 
 module.exports = function() {
   console.log('booting up the orchestrator');
   //create the dispatcher and action-bus;
   var actionBus = new ActionBus();
   var dispatcher = new Dispatcher();
+  var input = require('../lib/input');
 
-  var appState = new Store('appState', {
-    menu: require('../../../../data/menu.json').menu,
+  _.each(['up', 'down', 'left', 'right', 'enter'], function(button) {
+    actionBus.proxyStream(input[button + 'Key'])
   });
+  
+
+  var appState = new Store({
+    name: 'appstate',
+    state: { menu: require('../../../../data/menu.json').menu }
+  });
+
   window.appState = appState
 
   appState.onAction(actionBus, function(stream, store) {
-    stream
-    .filter(function(val) {
-      val.store === 'appstate'
+    return stream
+    .filter((val) => {
+      return val.type === 'input';
     })
-    .subscribe(function(val) {
+    .subscribe((val) => {
       console.log('appstate getting value: ', val);
     });
   });
-
-  actionBus.push({ msg: "hello world" });
-
 
 /*
   //Objective 1, get the sidebar menu activated

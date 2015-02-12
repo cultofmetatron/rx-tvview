@@ -32,14 +32,21 @@ var createPressStream = function(inputType) {
   })
   .filter(function(code) {
     return code === inputs[inputType];
-  });
-};
+  })
+ };
 
 var inputStreams = {}
 _.each(_.keys(inputs), function(inputType) {
   //we set up a subject proxy so that we can have multiple subscribers
   var msgProxy = new Rx.Subject();
-  createPressStream(inputType).subscribe(msgProxy);
+  createPressStream(inputType)
+  .map(function(code) {
+    return {
+      type: 'input',
+      key: inputType
+    };
+  })
+  .subscribe(msgProxy);
   inputStreams[inputType + 'Key'] = msgProxy;
 });
 

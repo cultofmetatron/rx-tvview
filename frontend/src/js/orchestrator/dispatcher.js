@@ -25,6 +25,7 @@ Dispatcher.prototype.push = function(storeName, value) {
   return this;
 };
 
+
 Dispatcher.prototype.listenTo = function(store) {
   var self = this;
   store.on('change', function(storeData) {
