@@ -16,5 +16,5 @@ app.get('/', function(req, res, next) {
   res.status(200).render('app', {});
 });
 
-
+console.log('listening on port ', process.env.PORT || 3000)
 app.listen(process.env.PORT || 3000);

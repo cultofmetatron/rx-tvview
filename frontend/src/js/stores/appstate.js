@@ -12,6 +12,7 @@ var AppState = function(opts) {
   this.mutate((store) => {
     return store.set('initify', 'go');
   })
+  setTimeout(() => { this. trigger(); }, 1000)
 };
 
 util.inherits(AppState, Store);
@@ -41,7 +42,6 @@ var chunk = function(arr, len) {
 var deriveIndex = function(chunkSize, i, j) {
   return (i * chunkSize) + j
 };
-
 
 //rebuilds the grid from the library data
 AppState.prototype.buildLibraryGrid = function() {
@@ -90,6 +90,14 @@ AppState.prototype.loadInitialState = function() {
   this.buildLibraryGrid();
 };
 
+AppState.prototype.trigger = function() {
+  this.emit('change', {
+    name: this.name,
+    value: this.store.toJS()
+  });
+  return this
+}
+
 AppState.prototype.moveDown = function() {
   log('moving down');
   var active = this.store.get('active');
@@ -111,21 +119,26 @@ AppState.prototype.moveDown = function() {
     if (coordinates.get(0) < libraryGrid.size - 1) {
       var oldIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1));
       var newIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0) + 1, coordinates.get(1));
-      this.mutate((store) => {
-        //return store.get('menu').get(active.get('menu')).get('links').get(index).set('active', true);
-        store.updateIn(['menu', active.get('menu').get('index'), 'links', oldIndex, 'active'], () => {
-          return false;
-        });
-        store.updateIn(['menu', active.get('menu').get('index'), 'links', newIndex, 'active'], () => {
-          return true;
-        });
-        store.updateIn(['active', 'movie', 0], (index) => {
-          return index + 1;
-        })
+      //if the new derivative exists
+      var links = this.store.get('menu').get(active.get('menu').get('index')).toJS().links;
+      if (links && links[newIndex]){
+        this.mutate((store) => {
+          //return store.get('menu').get(active.get('menu')).get('links').get(index).set('active', true);
+          store.updateIn(['menu', active.get('menu').get('index'), 'links', oldIndex, 'active'], () => {
+            return false;
+          });
+          store.updateIn(['menu', active.get('menu').get('index'), 'links', newIndex, 'active'], () => {
+            return true;
+          });
+          store.updateIn(['active', 'movie', 0], (index) => {
+            return index + 1;
+          })
 
-        return store;
-      });
-      this.buildLibraryGrid(); //redraw the library
+          return store;
+        });
+        this.buildLibraryGrid(); //redraw the library
+      }
+          
     }
   }
   return this;
@@ -247,10 +260,12 @@ AppState.prototype.moveRight = function() {
     this.buildLibraryGrid();
   } else if(active.get('movie') !== null) {
     // if the item is not all the way to the right
-    if (active.get('movie').get(1) < (CHUNK_SIZE - 1) ) {
+    var oldIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1));
+    var newIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1) + 1);
+
+    if (active.get('movie').get(1) < (CHUNK_SIZE - 1) && 
+       (this.store.get('menu').get(active.get('menu').get('index')).get('links').toJS()[newIndex])) {
       this.mutate((store) => {
-        var oldIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1));
-        var newIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1) + 1);
         return store
           .updateIn(['active', 'movie', 1], (val) => {
             //increment the second coordinate coordinate
