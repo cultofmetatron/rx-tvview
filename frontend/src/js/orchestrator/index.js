@@ -20,15 +20,16 @@ module.exports = function() {
   window.appState = appState
 
   appState.onAction(actionBus, function(stream, store) {
-    stream.subscribe(function(val) {
-      console.log('appstate getting value: ', val);
+    stream
+    .filter(function(val) {
+      val.store === 'appstate'
     })
+    .subscribe(function(val) {
+      console.log('appstate getting value: ', val);
+    });
   });
 
   actionBus.push({ msg: "hello world" });
-
-
-
 
 
 /*

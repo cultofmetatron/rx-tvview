@@ -6,6 +6,18 @@
  * and consequently do stuff with it which then passed to the dispatcher
  */
 
+/* 
+ * format
+ *  actions have the following properties
+ *  type: the type of action
+ *  data: data relevant to the action
+ *
+ *  the stores themeselves determine how they are going to react
+ *  to these changes
+ */
+
+
+
 
 var Rx = require('rx');
 var EventEmitter = require('events').EventEmitter;
