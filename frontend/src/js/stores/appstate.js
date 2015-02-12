@@ -1,9 +1,11 @@
 
 var Store = require('./store');
 var util = require('util');
+var Immutable = require('immutable');
 
 var AppState = function(opts) {
   Store.call(this, opts);
+  this.loadInitialState();
 };
 
 util.inherits(AppState, Store);
@@ -19,17 +21,23 @@ util.inherits(AppState, Store);
 
 //rebuilds the grid from the library data
 AppState.prototype.buildLibraryGrid = function() {
-
+  //do this later
 };
+
+/* active is a marker of what data is active + what sub component */
 
 AppState.prototype.loadInitialState = function() {
   var store = {};
   store.menu = require('../../../../data/menu.json').menu
   store.menu[0].active = true; //start focus here
-  store.active = ['menu', 0];
-  
-
+  store.active = [['menu', 0], ['component', null]];
+  this.store = Immutable.fromJS(store);
+  this.buildLibraryGrid();
 };
+
+AppState.prototype.moveDown = function() {
+  
+}
 
 //method to be run when the input comes in
 AppState.prototype.onInput = function(type) {

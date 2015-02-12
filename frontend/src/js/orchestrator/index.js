@@ -7,7 +7,7 @@ var _ = require('lodash');
 var ActionBus  = require('./action-bus');
 var Dispatcher = require('./dispatcher');
 var Store      = require('../stores/store');
-var AppState   = require('../stores/store');
+var AppState   = require('../stores/appstate');
 
 
 module.exports = function() {
@@ -22,9 +22,9 @@ module.exports = function() {
   });
   
 
-  var appState = new Store({
+  var appState = new AppState({
     name: 'appstate',
-    state: { menu: require('../../../../data/menu.json').menu }
+    //state: { menu: require('../../../../data/menu.json').menu }
   });
 
   window.appState = appState
