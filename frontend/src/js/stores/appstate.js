@@ -1,4 +1,7 @@
 
+var log = function() { console.log.apply(console, arguments); }
+
+
 var Store = require('./store');
 var util = require('util');
 var Immutable = require('immutable');
@@ -40,21 +43,30 @@ var deriveIndex = function(chunkSize, i, j) {
 //rebuilds the grid from the library data
 AppState.prototype.buildLibraryGrid = function() {
   var activeSelectionIndex = this.store.get('active').get('menu').get('index'); //get the index
-  var library = chunk(_.map(this.store.get('menu').get(activeSelectionIndex).get('links').toJS(), (link) => {
-    link.active = false; //explicitly make them false, well reset (THE ONE) after
-    return link;
-  }, this), CHUNK_SIZE);
-  
-  /* if a movie is specified in focus, then we shold mark it as active */
-  var coordinates = this.store.get('active').get('movie');
-  if (coordinates) {
-    library[coordinates.get(0)][coordinates.get(1)]['active'] = true;
-  }
-  this.mutate((store) => {
-    return store.updateIn(['libraryGrid'], () => {
-      return Immutable.fromJS(library);
+  if (this.store.get('menu').size > 0) {
+    var library = chunk(_.map(this.store.get('menu').get(activeSelectionIndex).toJS().links, (link) => {
+      link.active = false; //explicitly make them false, well reset (THE ONE) after
+      return link;
+    }, this), CHUNK_SIZE);
+    
+    /* if a movie is specified in focus, then we shold mark it as active */
+    var coordinates = this.store.get('active').get('movie');
+    if (coordinates) {
+      library[coordinates.get(0)][coordinates.get(1)]['active'] = true;
+    }
+    this.mutate((store) => {
+      return store.updateIn(['libraryGrid'], () => {
+        return Immutable.fromJS(library);
+      });
     });
-  });
+  } else {
+    this.mutate((store) => {
+      return store.updateIn(['libraryGrid'], () => {
+        return Immutable.fromJS([]);
+      });
+    });
+  }
+  return this;
 };
 
 /* active is a marker of what data is active + what sub movie */
@@ -76,6 +88,7 @@ AppState.prototype.loadInitialState = function() {
 };
 
 AppState.prototype.moveDown = function() {
+  log('moving down');
   var active = this.store.get('active');
   //focus is on the sideMenu, NOT the library view
   if (active.get('movie') === null) {
@@ -116,6 +129,7 @@ AppState.prototype.moveDown = function() {
 };
 
 AppState.prototype.moveUp = function() {
+  log('moving up')
   var active = this.store.get('active');
   if (active.get('movie') === null) {
     //is the menu not the first one?
@@ -155,6 +169,7 @@ AppState.prototype.moveUp = function() {
 };
 
 AppState.prototype.moveLeft = function() {
+  log('moving left')
   var active = this.store.get('active');
   var coordinates = active.get('movie');
   //if the focus is on the menu, then we do nothing
@@ -206,15 +221,61 @@ AppState.prototype.moveLeft = function() {
 };
 
 AppState.prototype.moveRight = function() {
-
+  log('moving right');
+  var activeSelectionIndex = this.store.get('active').get('menu').get('index'); //get the index
+  var active = this.store.get('active');
+  var coordinates = active.get('movie');
+  //if the focus is on the menu, then we switch focus to the right menu
+  if (active.get('menu').get('focused') && 
+     (this.store.get('menu').get(activeSelectionIndex).toJS().links.length > 0)) {
+    this.mutate((store) => {
+      //unfocus the menu, and set the view to 0, 0
+      return store
+        .updateIn(['active', 'menu', 'focused'], () => {
+          return false;
+        })
+        .updateIn(['active', 'movie'], () => {
+          return Immutable.fromJS([0, 0]);
+        })
+        .updateIn(['menu', active.get('menu').get('index'), 'links', 0, 'active'], () => {
+          return true;
+        });
+    });
+    this.buildLibraryGrid();
+  } else if(active.get('movie') !== null) {
+    // if the item is not all the way to the right
+    if (active.get('movie').get(1) < (CHUNK_SIZE - 1) ) {
+      this.mutate((store) => {
+        var oldIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1));
+        var newIndex = deriveIndex(CHUNK_SIZE, coordinates.get(0), coordinates.get(1) + 1);
+        return store
+          .updateIn(['active', 'movie', 1], (val) => {
+            //increment the second coordinate coordinate
+            return val + 1;
+          })
+          .updateIn(['menu', active.get('menu').get('index'), 'links', oldIndex, 'active'], (active) => {
+            return false;
+          })
+          .updateIn(['menu', active.get('menu').get('index'), 'links', newIndex, 'active'], (active) => {
+            return true;
+          });
+      });
+      this.buildLibraryGrid();
+    }
+  }
+  return this;
 };
 
 //method to be run when the input comes in
 AppState.prototype.onInput = function(type) {
-  this.mutate((store) => {
-    
+  (({
+    up: this.moveUp,
+    down: this.moveDown,
+    left: this.moveLeft,
+    right: this.moveRight,
+    //enter: this.moveRight
   
-  });
+  })[type] || function() {}).call(this);
 };
 
 

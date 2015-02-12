@@ -82,10 +82,9 @@
     {
       "active": false,
       "label": "Instant Queue",
-      "Links": [
+      "links": [
       
       ]
     },
-    {}
   ]
 }

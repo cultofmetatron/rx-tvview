@@ -36,6 +36,7 @@ module.exports = function() {
     })
     .subscribe((val) => {
       console.log('appstate getting value: ', val);
+      this.onInput(val.key)
     });
   });
 
