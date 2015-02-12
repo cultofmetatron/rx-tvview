@@ -12,7 +12,7 @@ var AppState = function(opts) {
   this.mutate((store) => {
     return store.set('initify', 'go');
   })
-  setTimeout(() => { this. trigger(); }, 1000)
+  setTimeout(() => { this. trigger(); }, 50)
 };
 
 util.inherits(AppState, Store);
