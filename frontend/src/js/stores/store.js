@@ -1,8 +1,22 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
+// import * as Rx from 'rx';
 var Rx = require('rx');
 var Immutable = require('immutable');
 
+// class Store extends EventEmitter {
+//  constructor() {
+//    super();
+//    this.name = options.name;
+//    this.store = Immutable.Map(options.state || {});
+//    //only dispatcher subscribe so no need for multiple broadcasts
+//    this._stream = Rx.Node.fromEvent(this, 'change');
+//  }
+//  onAction() {
+//  }
+//
+// }
+//
 var Store = function(options) {
   EventEmitter.call(this);
   this.name = options.name;
