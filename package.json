@@ -11,6 +11,7 @@
   "author": "Peter de Croos",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^2.9.12",
     "brfs": "^1.3.0",
     "browserify": "^8.1.3",
     "express": "^4.11.2",
@@ -19,13 +20,13 @@
     "jade": "^1.9.2",
     "jquery": "^2.1.3",
     "less": "^2.3.1",
-    "lodash": "^3.1.0",
+    "lodash": "^3.3.0",
     "mongoose": "^3.8.23",
     "multiline": "^1.0.2",
     "nodemon": "^1.3.7",
     "paperclip": "^1.2.11",
     "pouchdb": "^3.3.0",
-    "rx": "^2.3.25",
+    "rx": "^2.4.0",
     "supervisor": "^0.6.0",
     "traceur": "0.0.84",
     "vinyl-source-stream": "^1.0.0"

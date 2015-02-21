@@ -10,7 +10,7 @@ var fs = require('fs');
 gulp.task('frontend', function() {
   return browserify({
     debug: true,
-    transform: ['es6ify'],
+    transform: ['es6ify']
     //standalone: true
   })
     //.add('./frontend/src/js/**/*.js')
